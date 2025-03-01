@@ -1,0 +1,60 @@
+// ===========================
+// Global SCSS Variables
+// ===========================
+
+// Colors
+$primary-color: #060713;
+$secondery-text-color: #c2cdd6;
+$background-color: #fff;
+$text-color: #fff;
+
+// Typography
+$font-primary: 'Poppins', sans-serif;
+$font-heading: 'Poppins', sans-serif;
+$font-size-xsm: 12px;
+$font-size-sm: 14px;
+$font-size-base: 16px;
+$font-size-lg: 18px;
+$font-size-xxlg: 36px;
+$font-weight-light: 100;
+$font-weight-regular: 400;
+$font-weight-bold: 600;
+$line-height-base: 1.2;
+
+// Autocomplete Specific Colors
+$autocomplete-bg: #452577;
+$autocomplete-box-shadow: 0px 0px 22px 3px rgb(199 182 225 / 60%);
+$autocomplete-focus-outline: #756f6f;
+$autocomplete-button-bg: #fff;
+$autocomplete-button-color: #000;
+$autocomplete-item-bg: #f5f5f5;
+$autocomplete-list-bg: #fff;
+$autocomplete-list-item-color: #000;
+$autocomplete-list-item-border-color: #cacaca;
+$autocomplete-highlight-bg: #ececec;
+$autocomplete-max-width: 600px;
+$department-text-color: #686b6d;
+
+// Autocomplete Typography
+$autocomplete-title-size: calc($font-size-sm * 4);
+
+// Spacing
+$spacing-unit: 1rem;
+$spacing-xs: calc($spacing-unit * 0.5);
+$spacing-sm: calc($spacing-unit * 0.75);
+$spacing: $spacing-unit;
+$spacing-md: calc($spacing-unit * 1.5);
+$spacing-lg: calc($spacing-unit * 2);
+$spacing-xl: calc($spacing-unit * 3);
+
+// Breakpoints
+$breakpoint-xs: 480px;
+$breakpoint-sm: 768px;
+$breakpoint-md: 1024px;
+$breakpoint-lg: 1200px;
+$breakpoint-xl: 1440px;
+
+// Border Radius
+$border-radius-sm: 4px;
+$border-radius-md: 8px;
+$border-radius-lg: 32px;

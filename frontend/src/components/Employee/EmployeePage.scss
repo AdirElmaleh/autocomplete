@@ -1,0 +1,130 @@
+@import '../../styles/variables';
+
+.employee {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 8rem);
+    width: 100%;
+    position: relative;
+    height: 100%;
+
+    &__wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-lg;
+        height: 100%;
+        padding: 5rem;
+        box-shadow: 0 0 90px 16px rgba(0, 0, 0, 0.8);
+        
+        border-radius: $border-radius-lg;
+        background: #fff;
+        width: 100%;
+        max-width: 50rem;
+        color: #000;
+        position: relative;
+        min-height: 30rem;
+    }
+
+    &__heading {
+        text-align: center;
+    }
+
+    &__title {
+        font-weight: bold;
+        font-size: calc($font-size-base * 3.5);
+    }
+
+    &__id {
+        font-size: calc($font-size-base * 1.5);
+        vertical-align: middle;
+    }
+
+    &__inner-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: $spacing-lg;
+    }
+
+    &__info {
+        color: #000;
+        display: flex;
+        flex-direction: column;
+
+        & > * {
+            padding: $spacing-xs;
+            line-height: 1.5;
+        }
+    }
+
+    &__image {
+        width: 20rem;
+        object-fit: cover;
+        height: 20rem;
+        border-radius: 50%;
+        min-width: 20rem;
+    }
+
+    &__back-button {
+        position: absolute;
+        left: 2rem;
+        top: 1rem;
+        cursor: pointer;
+        color: #333;
+        transition: color 0.25s ease;
+    
+        &::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -3px;
+            width: 100%;
+            height: 2px;
+            background-color: black;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.25s ease;
+        }
+    
+        &:hover {
+            color: #333; // Slight darkening on hover
+        }
+    
+        &:hover::after {
+            transform: scaleX(1);
+        }
+
+        &:focus {
+            outline: unset;
+            outline-offset: unset;
+        
+        }
+    }
+
+    @media (max-width: 768px) {
+
+        padding: 0.5rem;
+        
+        &__wrapper {
+            padding-inline: $spacing-xs;
+            gap: $spacing;
+            padding-top: calc($spacing * 4);
+            padding-bottom: $spacing-md;
+        }
+
+        &__title {
+            font-size: calc($font-size-base * 2);
+        }
+
+        &__inner-wrapper {
+            flex-direction: column-reverse;
+        }
+
+        &__info > *{            
+            line-height: 1.5;
+        }
+    }   
+    
+}

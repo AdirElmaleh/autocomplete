@@ -1,0 +1,26 @@
+@import 'variables';
+@import 'reset';
+
+body {
+    margin: 0;
+    background: 
+        linear-gradient(
+            to bottom, 
+            rgb(15, 10, 30) 30%,
+            rgb(30, 15, 60) 52%,
+            rgb(50, 20, 90) 74%,
+            rgba(80, 40, 150, 0.9) 100%
+        ), 
+        radial-gradient(circle at top, rgba(255, 255, 255, 0.02), transparent), 
+        url('../../public/filestock/ele.svg');
+
+    background-size: cover;
+    background-attachment: fixed;
+    background-blend-mode: multiply;
+    background-repeat: no-repeat;
+}
+
+.main {
+    max-width: 2200px;
+    margin: auto;
+}

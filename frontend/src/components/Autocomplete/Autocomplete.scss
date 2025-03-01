@@ -1,0 +1,288 @@
+@import '../../styles/variables';
+
+.autocomplete {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	min-height: calc(100vh - 10rem); // full height minus header + footer
+	padding-bottom: 10rem;
+	width: 100%;
+	position: relative;
+
+	&__wrapper {
+		text-align: center;
+		max-width: $autocomplete-max-width;
+		width: 100%;
+		position: relative;
+		color: $text-color;
+	}
+
+	&__title {
+		font-size: $autocomplete-title-size;
+		line-height: $line-height-base;
+		font-weight: $font-weight-bold;
+		margin-bottom: $spacing-md;
+	}
+
+	&__subtitle {
+		font-weight: 100;
+		color: $secondery-text-color;
+		font-family: $font-primary;
+		margin-bottom: $spacing-lg;
+	}
+
+	&__suggestions {
+		position: relative;
+		max-width: 500px;
+		width: 100%;
+		margin: auto;
+	}
+
+	&__input-wrapper {
+		position: relative;
+	}
+
+	&__search-icon {
+		position: absolute;
+		left: 0.75rem;
+		width: 1.75rem;
+		top: 50%;
+		transform: translateY(-50%);
+		color: $text-color;
+		font-size: $font-size-lg;
+		pointer-events: none;
+	}
+
+	&__input {
+		width: 100%;
+		padding: $spacing-sm;
+		padding-left: 2.75rem;
+		padding-right: 2.25rem;
+		border: 1px solid $autocomplete-bg;
+		border-radius: $border-radius-lg;
+		color: $text-color;
+		font-weight: 100;
+		font-size: $font-size-sm;
+		background-color: $autocomplete-bg;
+		box-shadow: 0px 0px 22px 3px rgb(199 182 225 / 60%);
+
+		&:focus {
+			box-shadow: 0px 0px 29px 9px rgba(199, 182, 225, 0.6);
+			outline: 1px solid $autocomplete-focus-outline;
+		}
+	}
+
+	&__loader {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		left: 0.75rem;
+		width: 1.75rem;
+		top: 0.5rem;
+		position: absolute;
+
+		.spinner {
+			width: 30px;
+			height: 30px;
+			border: 4px solid $autocomplete-bg;
+			border-top-color: $text-color;
+			border-radius: 50%;
+			animation: spin 0.6s linear infinite;
+		}
+	}
+
+	&__button {
+		position: absolute;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		padding: $spacing-sm $spacing-lg;
+		font-size: $font-size-base;
+		font-weight: $font-weight-light;
+		color: $autocomplete-button-color;
+		background-color: $background-color;
+		border: none;
+		border-radius: $border-radius-lg;
+		cursor: pointer;
+		transition: all 0.15s;
+		font-smooth: always;
+		-webkit-font-smoothing: antialiased;
+
+		&:hover {
+			transform: scale(1.05);
+			will-change: transform;
+			font-weight: 100;
+		}
+	}
+	
+	&__no-results {
+		text-align: center;
+		padding: $spacing-lg;
+		position: absolute;
+		left: 0;
+		right: 0;
+	}
+
+	&__list {
+		position: absolute;
+		top: 5rem;
+		width: 100%;
+		background: $background-color;
+		margin: 0;
+		border-radius: $border-radius-lg;
+		list-style: none;
+		max-height: 0;
+		opacity: 0;
+		overflow: hidden;
+		padding: 0;
+		transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+		scrollbar-width: none;
+	
+		&::-webkit-scrollbar {
+		  display: none;
+		}
+	
+		&--visible:not(&--empty) {
+		  max-height: 20rem;
+		  opacity: 1;
+		  padding: $spacing-xs;
+		  overflow-y: auto;
+		}
+	  }
+	  
+	  
+
+	&__employee {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: flex-start;
+	}
+
+	&__name {
+		color: $autocomplete-list-item-color;
+	}
+
+	&__department {
+		font-size: $font-size-xsm;
+		color: $department-text-color;
+	}
+
+	&__item {
+		display: flex;
+		align-items: center;
+		padding: $spacing-xs;
+		gap: $spacing;
+		cursor: pointer;
+		transition: background 0.2s;
+
+		&--active {
+			background: $autocomplete-item-bg;
+
+			&:first-child {
+				border-top-right-radius: $border-radius-lg;
+				border-top-left-radius: $border-radius-lg;
+			}
+
+			&:last-child {
+				border-bottom-right-radius: $border-radius-lg;
+				border-bottom-left-radius: $border-radius-lg;
+			}
+		}
+
+		&:not(:last-child) {
+			border-bottom: 1px solid $autocomplete-list-item-border-color;
+		}
+
+		&:hover {
+			background: $autocomplete-item-bg;
+
+			&:first-child {
+				border-top-right-radius: $border-radius-lg;
+				border-top-left-radius: $border-radius-lg;
+			}
+
+			&:last-child {
+				border-bottom-right-radius: $border-radius-lg;
+				border-bottom-left-radius: $border-radius-lg;
+			}
+		}
+	}
+
+	&__image {
+		width: 3rem;
+		height: 3rem;
+		object-fit: cover;
+		border-radius: 50%;
+	}
+
+	&__highlight {
+		background-color: $autocomplete-highlight-bg;
+		font-weight: bold;
+		border-radius: $border-radius-sm;
+	}
+
+	&__error {
+		padding: $spacing;
+		padding-top: $spacing-lg;
+		position: absolute;
+	}
+
+	&__show-results {
+		padding: $spacing;
+		position: absolute;
+		text-align: center;
+		left: 0;
+		right: 0;
+
+		~.autocomplete__list--visible {
+			top: 6rem;
+		}
+	}
+
+	@media (max-width: $breakpoint-sm) {
+		padding: $spacing;
+		padding-bottom: 10rem;
+        padding-top: 5rem;
+        min-height: calc(100dvh - 10rem);
+
+		&__list--active {
+
+			padding-bottom: 35rem;
+		}
+
+		&__title {
+			font-size: $font-size-xxlg;
+		}
+
+		&__subtitle {
+			font-size: $font-size-sm;
+			margin-bottom: $spacing-lg;
+		}
+
+		&__button, &__input {
+			font-size: $font-size-sm;
+		}
+	}
+
+	@media only screen and (max-width: 400px) {
+		
+		&__button, &__input {
+			font-size: 0.7rem;
+		}
+
+		&__name {
+			font-size: 0.9rem;
+		}
+	}
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}

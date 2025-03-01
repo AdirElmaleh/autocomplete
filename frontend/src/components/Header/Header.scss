@@ -1,0 +1,49 @@
+@import '../../styles/variables';
+
+.header {
+	height: 100%;
+	max-height: 6rem;
+	overflow: hidden;
+	display: flex;
+	padding: $spacing $spacing-md;
+	position: relative;
+
+	&__logo {
+		padding: $spacing;
+		opacity: 0;
+
+		&--fade-in {
+			animation: fadeIn 0.8s ease-out;
+			opacity: 1;
+		}
+	}
+
+	img {
+		width: auto;
+		height: 3rem;
+		object-fit: contain;
+	}
+
+	@media (max-width: $breakpoint-sm) {
+		max-height: 5rem;
+
+		&__logo {
+			padding: $spacing-xs;
+		}
+
+		img {
+			height: 1.5rem;
+		}
+	}
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(-200px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
