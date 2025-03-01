@@ -225,7 +225,7 @@ function Autocomplete() {
 						query.length >= 2 &&
 						fullSearch && (
 							<div className='autocomplete__show-results'>
-								Scroll to see results for "{query}"
+								Scroll the list to see all results for "{query}"
 							</div>
 					)}
 					<ul
