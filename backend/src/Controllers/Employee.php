@@ -37,7 +37,6 @@ class Employee
         return;
     }
 
-    // Return employee details
     $employee = [
         'id'          => $result['id'],
         'imageUrl'    => $result['image_url'],

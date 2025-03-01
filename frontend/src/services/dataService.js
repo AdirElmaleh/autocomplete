@@ -1,7 +1,12 @@
+const API_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://deloitte-autocomplete.com"
+    : "http://localhost:8000";
+
 export async function fetchAutocomplete(query, fullResults = false) {
 	try {
 		const response = await fetch(
-			`https://deloitte-autocomplete.com/api/autocomplete?query=${encodeURIComponent(
+			`${API_URL}/api/autocomplete?query=${encodeURIComponent(
 				query
 			)}&fullResults=${fullResults}`
 		)
@@ -31,7 +36,7 @@ export async function fetchAutocomplete(query, fullResults = false) {
 export async function fetchEmployee(id) {
 	try {
 		const response = await fetch(
-			`https://deloitte-autocomplete.com/api/employee?query=${encodeURIComponent(id)}`
+			`${API_URL}/api/employee?query=${encodeURIComponent(id)}`
 		)
 
 		if (!response.ok) {
