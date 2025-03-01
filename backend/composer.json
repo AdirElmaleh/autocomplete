@@ -1,0 +1,12 @@
+{
+    "name": "autocomplete/backend",
+    "description": "PHP backend fro autocomplete",
+    "require": {
+        "php": "^7.4 || ^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Autocomplete\\": "src/"
+        }
+    }
+}
