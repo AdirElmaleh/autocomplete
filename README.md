@@ -52,7 +52,7 @@ This project demonstrates an employee search tool that leverages autocomplete fu
 │   │   │   └── DatabaseService.php
 │   └── config
 │   │   └── db.php
-│   └── index.php (router)
+│   └── index.php
 └── README.md
 ```
 
