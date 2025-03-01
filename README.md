@@ -77,8 +77,9 @@ This project demonstrates an employee search tool that leverages autocomplete fu
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/employee-autocomplete.git
-   cd employee-autocomplete
+   git clone https://github.com/AdirElmaleh/autocomplete.git
+   
+   cd autocomplete
 
 2. **Install dependencies:**
    ```bash
