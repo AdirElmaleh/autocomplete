@@ -209,6 +209,7 @@ function Autocomplete() {
 					{isFocused &&
 						suggestions.length === 0 &&
 						query.length >= 2 &&
+						error === '' &&
 						hasSearched &&
 						!isLoading && (
 							<div className='autocomplete__no-results'>

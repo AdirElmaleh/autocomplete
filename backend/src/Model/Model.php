@@ -7,115 +7,134 @@ use PDO;
 
 class Model
 {
-    private PDO $conn;
+    private ?PDO $conn;
+    private string $fallbackFile;
 
 
     public function __construct()
     {
         $this->conn = DatabaseService::getConnection();
+        $this->fallbackFile = __DIR__ . '/../../storage/fallback.json';
 
-        if (!$this->conn) {
-            throw new \RuntimeException("Database connection failed.");
+        if (!$this->conn && !file_exists($this->fallbackFile)) {
+            throw new \RuntimeException("Database connection failed, and no fallback file found.");
         }
     }
 
-    /**
-     * Get all employees from the database.
-     */
-    public function getAllIEmployees(): array
-    {
-        $sql = "SELECT * FROM employees";
-        $stmt = $this->conn->query($sql);
-
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
 
     /**
-     * Fetch a single employee by ID naybe will be needed in the future.
+     * Fetch a single employee by ID.
      */
-    public function getEmployeeById(int $id): ?array
+    public function getEmployeeById(int $id)
     {
-        $sql = "SELECT id, name, work_title, image_url, information
-                FROM employees
-                WHERE id = :id
-                LIMIT 1";
 
-        // Prepare query
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
+        if (!$this->conn) {
+            return $this->getEmployeeByIdFromFallback($id);
+        }
 
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result ?: null;
+        try {
+            $sql = "SELECT id, name, work_title, image_url, information
+                    FROM employees
+                    WHERE id = :id
+                    LIMIT 1";
+
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result ?: $this->getEmployeeByIdFromFallback($id);
+        } catch (\PDOException $e) {
+            error_log("Database error in getEmployeeById: " . $e->getMessage());
+        }
+
+        return null;
     }
 
-     /**
-     * Search items by name or work_title.
+    private function getEmployeeByIdFromFallback(int $id)
+    {
+
+        if (!file_exists($this->fallbackFile)) {
+            return null;
+        }
+
+        $jsonData = file_get_contents($this->fallbackFile);
+        $data = json_decode($jsonData, true);
+
+        if (!isset($data['employees']) || !is_array($data['employees'])) {
+            return null;
+        }
+
+        foreach ($data['employees'] as $employee) {
+            if ((int)$employee['id'] === $id) {
+                return $employee;
+            }
+        }
+
+        return null;
+    }
+
+
+    /**
+     * Search employees by name or work_title.
      */
-    public function searchEmployees(string $query, bool $fullResults = false): array
+    public function searchEmployees(string $query, bool $fullResults = false)
     {
         $limit = $fullResults ? 1000 : 5;
 
-        $sql = "SELECT id, name, work_title, image_url
-                FROM employees
-                WHERE name LIKE :search OR work_title LIKE :search
-                ORDER BY name
-                LIMIT $limit";
+        if (!$this->conn) {
+            return $this->searchEmployeesFromFallback($query, $limit);
+        }
 
-        $stmt = $this->conn->prepare($sql);
-        $param = "%$query%";
-        $stmt->bindValue(':search', $param, PDO::PARAM_STR); // Prefix search
-        $stmt->execute();
+        try {
+            $sql = "SELECT id, name, work_title, image_url
+                    FROM employees
+                    WHERE name LIKE :search OR work_title LIKE :search
+                    ORDER BY name
+                    LIMIT $limit";
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stmt = $this->conn->prepare($sql);
+            $param = "%$query%";
+            $stmt->bindValue(':search', $param, PDO::PARAM_STR);
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+
+            error_log("Database query failed: " . $e->getMessage());
+        }
+
+        return [];
     }
 
 
-    /**
-     * Create a new item. Returns the new item's ID.
-     */
-    public function createEmployee(string $name, string $workTitle, string $imageUrl): int
+    private function searchEmployeesFromFallback(string $query, int $limit): array
     {
-        $sql = "INSERT INTO employees (name, work_title, image_url)
-                VALUES (:name, :work_title, :image_url)";
+        if (!file_exists($this->fallbackFile)) {
+            return [];
+        }
 
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindValue(':name', $name);
-        $stmt->bindValue(':work_title', $workTitle);
-        $stmt->bindValue(':image_url', $imageUrl);
+        $jsonData = file_get_contents($this->fallbackFile);
+        $data = json_decode($jsonData, true);
 
-        $stmt->execute();
-        return (int) $this->conn->lastInsertId();
-    }
+        if (!isset($data['employees']) || !is_array($data['employees'])) {
+            return [];
+        }
 
-    /**
-     * Update an existing item by ID.
-     */
-    public function updateEmployee(int $id, string $name, string $workTitle, string $imageUrl): bool
-    {
-        $sql = "UPDATE employees
-                SET name = :name, work_title = :work_title, image_url = :image_url
-                WHERE id = :id";
+        $employees = $data['employees'];
+        $filteredEmployees = [];
 
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindValue(':name', $name);
-        $stmt->bindValue(':work_title', $workTitle);
-        $stmt->bindValue(':image_url', $imageUrl);
-        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        foreach ($employees as $employee) {
 
-        return $stmt->execute();
-    }
+            $name = $employee['name'] ?? '';
+            $workTitle = $employee['work_title'] ?? '';
 
-    /**
-     * Delete an item by ID.
-     */
-    public function deleteEmployee(int $id): bool
-    {
-        $sql = "DELETE FROM employees WHERE id = :id";
 
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            if (stripos($name, $query) !== false || stripos($workTitle, $query) !== false) {
+                $filteredEmployees[] = $employee;
+            }
+        }
 
-        return $stmt->execute();
+        return array_slice($filteredEmployees, 0, $limit);
     }
 }
